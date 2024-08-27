@@ -27,7 +27,7 @@ exports.register = async (req, res) => {
             password
         });
 
-        sendTokenResponse(user, 200, res);
+        sendTokenResponse(user, 200, res, "User registered successfully");
     } catch (err) {
         res.status(400).json({ success: false, error: err.message });
     }
@@ -45,7 +45,7 @@ exports.login = async (req, res) => {
         const user = await User.findOne({ email }).select('+password');
 
         if (!user) {
-            return res.status(400).json({ success: false, error: 'Invalid credentials' });
+            return res.status(400).json({ success: false, error: 'User not found' });
         }
 
         const isMatch = await user.matchPassword(password);
@@ -54,7 +54,7 @@ exports.login = async (req, res) => {
             return res.status(400).json({ success: false, error: 'Invalid credentials' });
         }
 
-        sendTokenResponse(user, 200, res);
+        sendTokenResponse(user, 200, res ,"User logged in successfully");
     } catch (err) {
         res.status(400).json({ success: false, error: err.message });
     }
@@ -71,7 +71,7 @@ exports.getMe = async (req, res) => {
 };
 
 // Function to generate token and send response
-const sendTokenResponse = (user, statusCode, res) => {
+const sendTokenResponse = (user, statusCode, res,message) => {
     const token = user.getSignedJwtToken();
 
     const options = {
@@ -82,5 +82,6 @@ const sendTokenResponse = (user, statusCode, res) => {
     res.status(statusCode).cookie('token', token, options).json({
         success: true,
         token,
+        Message: message
     });
 };

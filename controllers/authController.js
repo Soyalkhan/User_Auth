@@ -67,12 +67,29 @@ exports.login = async (req, res) => {
 
 // Get current logged in user
 exports.getMe = async (req, res) => {
-    const user = await User.findById(req.user.id);
+    try {
+        const user = await User.findById(req.user.id);
+        
+        // Reorder fields for presentation
+        const orderedUser = {
+            _id: user._id,
+            name: user.name,  // Name comes first
+            email: user.email,
+            phone: user.phone,
+            password: user.password,
+            createdAt: user.createdAt,
+            links: user.links
+        };
 
-    res.status(200).json({
-        success: true,
-        data: user
-    });
+        res.status(200).json({
+            success: true,
+            data: orderedUser
+        });
+        console.log(orderedUser);
+        
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
 };
 
 // Function to generate token and send response
@@ -105,44 +122,3 @@ exports.logout = (req, res) => {
     });
 };
 
-
-// Update user's name
-exports.updateName = async (req, res) => {
-    const { name } = req.body;
-
-    if (!name) {
-        return res.status(400).json({ success: false, message: 'Please provide a name' });
-    }
-
-    try {
-        const user = await User.findById(req.user.id);
-
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
-
-           // Update the user's name
-           user.name = name;
-           await user.save();
-           
-        // Custom MongoDB update to reorder fields
-        const updatedUser = await User.findByIdAndUpdate(
-            req.user.id,
-            { 
-                $set: { 
-                    name, 
-                    email: user.email, 
-                    phone: user.phone,
-                    password: user.password, 
-                    createdAt: user.createdAt,
-                    links: user.links 
-                } 
-            },
-            { new: true, runValidators: true }
-        );
-
-        res.status(200).json({ success: true, data: updatedUser });
-    } catch (err) {
-        res.status(500).json({ success: false, error: err.message });
-    }
-};

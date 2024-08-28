@@ -38,27 +38,32 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-        return res.status(400).json({ success: false, error: 'Please provide an email and password' });
+        return res.status(400).json({ success: false, message: 'Please provide an email and password' });
     }
 
     try {
         const user = await User.findOne({ email }).select('+password');
 
         if (!user) {
-            return res.status(400).json({ success: false, error: 'User not found' });
+            return res.status(400).json({ success: false, message: 'User not found' });
         }
 
         const isMatch = await user.matchPassword(password);
 
         if (!isMatch) {
-            return res.status(400).json({ success: false, error: 'Invalid credentials' });
+            return res.status(400).json({ success: false, message: 'Invalid credentials' });
         }
 
-        sendTokenResponse(user, 200, res ,"User logged in successfully");
+        sendTokenResponse(user, 200, res, "User logged in successfully");
     } catch (err) {
-        res.status(400).json({ success: false, error: err.message });
+        // You can log the actual error for debugging purposes if needed
+        console.error(err);
+
+        // Return a user-friendly error message
+        res.status(500).json({ success: false, message: 'An error occurred while trying to log in. Please try again later.' });
     }
 };
+
 
 // Get current logged in user
 exports.getMe = async (req, res) => {

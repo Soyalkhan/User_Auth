@@ -104,6 +104,8 @@ exports.logout = (req, res) => {
 // Update user's name
 exports.updateName = async (req, res) => {
     const { name } = req.body;
+    console.log('Request user ID:', req.user.id);
+    console.log('New name:', name);
 
     if (!name) {
         return res.status(400).json({ success: false, message: 'Please provide a name' });

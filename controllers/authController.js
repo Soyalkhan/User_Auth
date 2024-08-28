@@ -116,7 +116,9 @@ exports.updateName = async (req, res) => {
             req.user.id,
             { name },
             { new: true, runValidators: true }
+            
         );
+        console.log('Updated user:', user);
 
         if (!user) {
             return res.status(404).json({ success: false, message: 'User not found' });

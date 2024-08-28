@@ -17,7 +17,7 @@ exports.register = async (req, res) => {
        }
 
     if (password !== confirmPassword) {
-        return res.status(400).json({ success: false, error: 'Passwords do not match' });
+        return res.status(400).json({ success: false, message: 'Passwords do not match' });
     }
 
     try {
@@ -29,7 +29,7 @@ exports.register = async (req, res) => {
 
         sendTokenResponse(user, 200, res, "User registered successfully");
     } catch (err) {
-        res.status(400).json({ success: false, error: err.message });
+        res.status(400).json({ success: false, message: err.message });
     }
 };
 

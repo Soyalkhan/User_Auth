@@ -104,27 +104,35 @@ exports.logout = (req, res) => {
 // Update user's name
 exports.updateName = async (req, res) => {
     const { name } = req.body;
-    console.log('Request user ID:', req.user.id);
-    console.log('New name:', name);
 
     if (!name) {
         return res.status(400).json({ success: false, message: 'Please provide a name' });
     }
 
     try {
-        const user = await User.findByIdAndUpdate(
-            req.user.id,
-            { name },
-            { new: true, runValidators: true }
-            
-        );
-        console.log('Updated user:', user);
+        const user = await User.findById(req.user.id);
 
         if (!user) {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
 
-        res.status(200).json({ success: true, data: user });
+        // Custom MongoDB update to reorder fields
+        const updatedUser = await User.findByIdAndUpdate(
+            req.user.id,
+            { 
+                $set: { 
+                    name, 
+                    email: user.email, 
+                    phone: user.phone,
+                    password: user.password, 
+                    createdAt: user.createdAt,
+                    links: user.links 
+                } 
+            },
+            { new: true, runValidators: true }
+        );
+
+        res.status(200).json({ success: true, data: updatedUser });
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });
     }

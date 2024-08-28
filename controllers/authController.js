@@ -121,6 +121,10 @@ exports.updateName = async (req, res) => {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
 
+           // Update the user's name
+           user.name = name;
+           await user.save();
+           
         // Custom MongoDB update to reorder fields
         const updatedUser = await User.findByIdAndUpdate(
             req.user.id,

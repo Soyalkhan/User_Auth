@@ -70,11 +70,10 @@ exports.getMe = async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
         
-        // Reorder fields 
+        // Reorder fields for presentation
         const orderedUser = {
             _id: user._id,
-            name: user.name,
-            username: user.username,
+            name: user.name,  // Name comes first
             email: user.email,
             phone: user.phone,
             password: user.password,

@@ -7,7 +7,7 @@ const nameRoutes = require('./routes/nameRoutes');
 // Load environment variablesnpm
 dotenv.config({ path: './.env' });
 
-// Connect to database 
+// Connect to database
 connectDB();
 
 const app = express();

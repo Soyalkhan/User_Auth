@@ -24,7 +24,7 @@ exports.register = async (req, res) => {
         const user = await User.create({
             email,
             phone,
-            password
+            password,
         });
 
         sendTokenResponse(user, 200, res, "User registered successfully");

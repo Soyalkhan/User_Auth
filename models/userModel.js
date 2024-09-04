@@ -7,6 +7,12 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: ''  // Optional field with a default empty string
     },
+    username: {
+        type: String,
+        default: '',  // Set to an empty string initially
+        // unique: true,
+        sparse: true  // Ensures uniqueness only for non-empty strings
+    },
     email: {
         type: String,
         required: [true, 'Please add an email'],

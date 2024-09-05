@@ -18,7 +18,16 @@ exports.addLink = async (req, res) => {
         user.links.push(newLink);
         await user.save();
 
-        res.status(200).json(user);
+        res.status(200).json({
+            success: true,
+            message: 'Link added.',
+            user: {
+                // id: user._id,
+                // name: user.name,
+                // email: user.email,
+                links: user.links
+            }
+        });
     } catch (err) {
         res.status(500).json({ message: 'Server Error', error: err.message });
     }

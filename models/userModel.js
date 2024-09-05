@@ -41,6 +41,11 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    isVerified: { 
+        type: Boolean, 
+        default: false }, // New field for phone verification
+    otp: String, // Stores OTP
+    otpExpiry: Date, // Stores OTP expiration
     links: [
         {
             name: { type: String, required: true },

@@ -1,5 +1,8 @@
 const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
+const { generateOTP } = require('../utils/otpGenerator');
+const { sendOTP } = require('../utils/twilioService');
+
 
 // Register a new user
 exports.register = async (req, res) => {
@@ -25,9 +28,24 @@ exports.register = async (req, res) => {
             email,
             phone,
             password,
+            isVerified: false // Initially set as false
         });
 
-        sendTokenResponse(user, 200, res, "User registered successfully");
+        
+
+        // Generate OTP
+        const otp = generateOTP();
+
+        // Store OTP and expiration in the user document
+        user.otp = otp;
+        user.otpExpiry = Date.now() + 10 * 60 * 1000; // Expires in 10 mins
+        await user.save();
+
+        // Send OTP to the user's phone number via Twilio
+        await sendOTP(phone, otp);
+
+
+        sendTokenResponse(user, 200, res, "User registered successfully, Please verify phone number.");
     } catch (err) {
         res.status(400).json({ success: false, message: err.message });
     }
@@ -77,6 +95,7 @@ exports.getMe = async (req, res) => {
             email: user.email,
             phone: user.phone,
             password: user.password,
+            isVerified: user.isVerified,
             createdAt: user.createdAt,
             links: user.links
         };
@@ -104,7 +123,7 @@ const sendTokenResponse = (user, statusCode, res,message) => {
     res.status(statusCode).cookie('token', token, options).json({
         success: true,
         token,
-        Message: message,
+        message: message,
         user: user.toJSON()
         });
 };
@@ -121,5 +140,34 @@ exports.logout = (req, res) => {
         success: true,
         message: 'Logged out successfully',
     });
+};
+
+
+//verify otp 
+exports.verifyOTP = async (req, res) => {
+    const { phone, otp } = req.body;
+
+    try {
+        // Find the user based on the phone number
+        const user = await User.findOne({ phone });
+
+        if (!user) return res.status(400).json({ message: 'User not found' });
+
+        // Check if OTP is valid and not expired
+        if (otp !== user.otp || Date.now() > user.otpExpiry) {
+            return res.status(400).json({ message: 'Invalid or expired OTP' });
+        }
+
+        // Mark the user as verified
+        user.isVerified = true;
+        user.otp = undefined; // Clear OTP
+        user.otpExpiry = undefined; // Clear OTP expiry
+        await user.save();
+
+        res.status(200).json({ message: 'OTP verified successfully. Phone number is now verified.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error during OTP verification.' });
+    }
 };
 

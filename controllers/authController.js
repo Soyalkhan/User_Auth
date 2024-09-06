@@ -2,6 +2,7 @@ const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 const { generateOTP } = require('../utils/otpGenerator');
 const { sendOTP } = require('../utils/twilioService');
+const { json } = require('body-parser');
 
 
 // Register a new user
@@ -95,6 +96,7 @@ exports.getMe = async (req, res) => {
             email: user.email,
             phone: user.phone,
             password: user.password,
+            bio: user.bio,
             isVerified: user.isVerified,
             createdAt: user.createdAt,
             links: user.links
@@ -104,7 +106,7 @@ exports.getMe = async (req, res) => {
             success: true,
             data: orderedUser
         });
-        console.log(orderedUser);
+        // console.log(orderedUser);
         
     } catch (err) {
         res.status(500).json({ success: false, message: 'Server error' });
@@ -171,3 +173,27 @@ exports.verifyOTP = async (req, res) => {
     }
 };
 
+
+
+
+//ading  bio
+exports.bio = async (req , res) =>{
+    const { bio } = req.body;
+     try{
+
+        const addBio = await User.findByIdAndUpdate(
+            req.user.id,
+            { bio },
+            { new: true, runValidators: true }
+        );
+
+        if(!addBio){
+            return res.status(404),json({ success:false, message: "User not found"})
+        }
+        res.status(200).json({ success: true, message: "The bio has been added."})
+     }
+     catch(err){
+        res.status(500).json({ success: false, message: "Error while adding user bio."})
+     }
+
+}

@@ -31,6 +31,12 @@ const UserSchema = new mongoose.Schema({
             'Please add a valid 10-digit phone number'
         ]
     },
+    bio: {
+        type: String,
+        default: '',  // default empty string if bio is not provided
+        maxlength: [100, 'Bio cannot be more than 100 characters'],  // set maximum length to 100 characters
+        trim: true  // removes leading or trailing spaces
+    },
     password: {
         type: String,
         required: [true, 'Please add a password'],

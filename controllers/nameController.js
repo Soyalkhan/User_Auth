@@ -22,10 +22,10 @@ exports.updateName = async (req, res) => {
         );
 
         if (!updatedUser) {
-            return res.status(404).json({ success: false, message: 'User not found' });
+            return res.status(404).json({ success: false, message: 'User not found'});
         }
 
-        res.status(200).json({ success: true, data: updatedUser });
+        res.status(200).json({ success: true, message: 'name and username has been added', user: updatedUser});
     } catch (err) {
         res.status(500).json({ success: false, message: 'An error occurred while updating the name. Please try again later.' });
     }

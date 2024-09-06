@@ -25,9 +25,9 @@ exports.updateName = async (req, res) => {
             return res.status(404).json({ success: false, message: 'User not found'});
         }
 
-        res.status(200).json({ success: true, message: 'name and username has been added', user: updatedUser});
+        res.status(200).json({ success: true, message: 'Name and Username has been added', user: updatedUser});
     } catch (err) {
         res.status(500).json({ success: false, message: 'An error occurred while updating the name. Please try again later.' });
     }
 };
-  
+   

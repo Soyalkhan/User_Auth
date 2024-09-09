@@ -14,7 +14,7 @@ const sendOTP = (phone, otp) => {
 // console.log(userNumberWithCountryCode);// debug to check added +91 or not 
 
     return client.messages.create({
-        body: `@DDC : <br> Your Link tree verification code is: ${otp}`,
+        body: `@DDC :  Your verification code is: ${otp}`,
         from: process.env.TWILIO_PHONE_NUMBER,
         to: userNumberWithCountryCode, // Use the phone number with the country code
     });

@@ -165,11 +165,11 @@ exports.verifyOTP = async (req, res) => {
         user.otp = undefined; // Clear OTP
         user.otpExpiry = undefined; // Clear OTP expiry
         await user.save();
-
-        res.status(200).json({ message: 'OTP verified successfully. Phone number is now verified.' });
+        
+        sendTokenResponse(user, 200, res, 'OTP verified successfully.');
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error during OTP verification.' });
+        res.status(500).json({success: false,  message: 'Error during OTP verification.' });
     }
 };
 
@@ -197,3 +197,40 @@ exports.bio = async (req , res) =>{
      }
 
 }
+
+// login via mobile and otp
+
+// Login user
+exports.loginByPhone = async (req, res) => {
+    const { phone } = req.body;
+
+    if(!phone){
+        return res.status(400).json({success: false, message: 'Please provide an valid number.'})
+    }
+
+    try {
+        const user = await User.findOne({ phone });
+
+        if (!user) {
+            return res.status(400).json({ success: false, message: 'User not found' });
+        }
+
+        const otp = generateOTP();
+
+        // Store OTP and expiration in the user document
+        user.otp = otp;
+        user.otpExpiry = Date.now() + 10 * 60 * 1000; // Expires in 10 mins
+        await user.save();
+
+        // Send OTP to the user's phone number via Twilio
+        await sendOTP(phone, otp);
+
+        sendTokenResponse(user, 200, res, `OTP sent on ${phone}`);
+    } catch (err) {
+        // You can log the actual error for debugging purposes if needed
+        console.error(err);
+
+        // Return a user-friendly error message
+        res.status(500).json({ success: false, message: 'An error occurred while sending otp.' });
+    }
+};

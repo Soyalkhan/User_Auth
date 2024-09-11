@@ -89,10 +89,11 @@ exports.getMe = async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
         
-        // Reorder fields for presentation
+        // Reorder fields for presentation to 
         const orderedUser = {
             _id: user._id,
-            name: user.name,  // Name comes first
+            name: user.name,
+            username: user.username, 
             email: user.email,
             phone: user.phone,
             password: user.password,
@@ -104,7 +105,8 @@ exports.getMe = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            data: orderedUser
+            message: 'User data loaded successfully ',
+            user: orderedUser
         });
         // console.log(orderedUser);
         
@@ -222,7 +224,6 @@ exports.loginByPhone = async (req, res) => {
         user.otpExpiry = Date.now() + 10 * 60 * 1000; // Expires in 10 mins
         await user.save();
 
-        // Send OTP to the user's phone number via Twilio
         await sendOTP(phone, otp);
 
         sendTokenResponse(user, 200, res, `OTP sent on ${phone}`);

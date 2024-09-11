@@ -15,11 +15,12 @@ exports.protect = async (req, res, next) => {
         token = req.headers.authorization.split(' ')[1];
     }
 
-    // console.log('Authorization Header:', req.headers.authorization); // Debugging line
-    // console.log('Token:', token); // Debugging line
+    console.log("Header with Token val : " + req.headers.authorization );
+    
+
     
     if (!token) {
-        return res.status(401).json({ success: false, message: 'Not authorized to access this route' });
+        return res.status(401).json({ success: false, message: 'Not authorized to access this route 1' });
     }
 
     try {
@@ -27,6 +28,6 @@ exports.protect = async (req, res, next) => {
         req.user = await User.findById(decoded.id);
         next();
     } catch (err) {
-        return res.status(401).json({ success: false, message: 'Not authorized to access this route' });
+        return res.status(401).json({ success: false, message: 'Not authorized to access this route 2' });
     }
 };

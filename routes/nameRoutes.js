@@ -1,5 +1,5 @@
 const express = require('express');
-const { updateName } = require('../controllers/nameController');
+const { addName, updateName } = require('../controllers/nameController');
 const { protect } = require('../middlewares/authMiddleware'); // Ensure user is authenticated
 
 const router = express.Router();
@@ -8,5 +8,6 @@ const router = express.Router();
 router.use(protect);
 
 // Route to update user's name
-router.put('/', updateName);
+router.put('/', addName);
+router.put('/updateName', protect, updateName)
 module.exports = router;

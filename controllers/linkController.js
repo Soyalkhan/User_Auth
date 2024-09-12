@@ -1,4 +1,6 @@
+const { json } = require('body-parser');
 const User = require('../models/userModel');
+const { link } = require('../routes/authRoutes');
 
 
 exports.addLink = async (req, res) => {
@@ -47,3 +49,45 @@ exports.getLinks = async (req, res) => {
         res.status(500).json({ message: 'Server Error', error: err.message });
     }
 };
+
+
+exports.updateLink = async ( req, res) =>{
+
+    const {linkId, name, url} = req.body;
+
+    if(!linkId || !name || !url){
+        return res.status(400).json({success: false, message: 'Please provide new name and url to update'});
+    }
+
+    try{
+
+        // user by id 
+
+        const user = await User.findById(req.user.id);
+
+        if(!user){
+            return res.status(404).json({ success: false , message: 'user not found'});
+        }
+
+        const newLink = user.links.id(linkId);
+
+        if(!link){
+            return res.status(404).json({success: false, message: 'link not found'});
+
+        }
+
+        //update link in db by link id and for the desired user
+        newLink.name = name;
+        newLink.url = url;
+
+        await user.save();
+
+        res.status(200).json({success: true, message: 'link updated', links: newLink});
+
+
+    }
+    catch(err){
+            console.log(err);
+            res.status(500).json({success: false, message: 'An error occurred while updating link.'});
+    }
+}

@@ -53,7 +53,7 @@ const UserSchema = new mongoose.Schema({
     otp: String, // Stores OTP
     otpExpiry: Date, // Stores OTP expiration
     links: [
-        {
+        {   
             name: { type: String, required: true },
             url: { type: String, required: true },
         },

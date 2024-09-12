@@ -1,7 +1,7 @@
 const User = require('../models/userModel');
 
-// Update user's name and username
-exports.updateName = async (req, res) => {
+// add user's name and username
+exports.addName = async (req, res) => {
     const { name, username } = req.body;
 
     if (!name || !username) {
@@ -31,3 +31,29 @@ exports.updateName = async (req, res) => {
     }
 };
    
+
+exports.updateName = async ( req, res) =>{
+
+    const {name} = req.body;
+    
+        if(!name){
+            res.status(400).json({success: false, message: 'Please provide name to upate.'})
+        }
+
+        try{
+
+            const user = await User.findById(req.user.id);
+
+            if(!user){
+                return res.status(404).json({ success: false , message: 'user not found.'});
+            }
+            //update only name
+            user.name = name;
+             await user.save();
+
+             res.status(200).json({success: true, message: 'Your name has been updated.'})
+        }
+        catch(err){
+            res.status(500).json({success: false, message: 'Name updation failed sever error.'})
+        }
+}

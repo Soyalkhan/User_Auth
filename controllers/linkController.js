@@ -91,3 +91,35 @@ exports.updateLink = async ( req, res) =>{
             res.status(500).json({success: false, message: 'An error occurred while updating link.'});
     }
 }
+
+
+exports.deleteLink = async  ( req, res) =>{
+
+    const {linkId} = req.body;
+
+    if(!linkId){
+        return res.status(400).json({success: false, message: 'please provide linkId'});
+    }
+
+    try{
+            const user = await User.findById(req.user.id);
+
+            if(!user){
+                return res.status(404).json({ success: false , message: 'user not found'});
+            }
+
+        const link = user.links.id(linkId);
+
+            link.deleteOne(); // delete only link for user
+            
+            await user.save();
+            res.status(200).json({ success: true, message: 'Link deleted successfully', links: user.links });
+
+    }
+    catch(err){
+        console.log(err);
+        
+        res.status(500).json({success: false, message: 'An error occurred while deleting link.'})
+    }
+
+}

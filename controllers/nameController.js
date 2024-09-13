@@ -51,7 +51,7 @@ exports.updateName = async ( req, res) =>{
             user.name = name;
              await user.save();
 
-             res.status(200).json({success: true, message: 'Your name has been updated.'})
+             res.status(200).json({success: true, message: 'Your name has been updated.', name:name})
         }
         catch(err){
             res.status(500).json({success: false, message: 'Name updation failed sever error.'})

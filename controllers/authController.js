@@ -192,7 +192,7 @@ exports.bio = async (req , res) =>{
         if(!addBio){
             return res.status(404),json({ success:false, message: "User not found"})
         }
-        res.status(200).json({ success: true, message: "The bio has been added."})
+        res.status(200).json({ success: true, message: "The bio has been added.", bio:bio})
      }
      catch(err){
         res.status(500).json({ success: false, message: "Error while adding user bio."})

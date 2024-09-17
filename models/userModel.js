@@ -56,6 +56,12 @@ const UserSchema = new mongoose.Schema({
         default: false }, // New field for phone verification
     otp: String, // Stores OTP
     otpExpiry: Date, // Stores OTP expiration
+    SocialURLs: {
+        Facebook: { type: String, default: '' }, // Default to an empty string
+        X: { type: String, default: '' },
+        Instagram: { type: String, default: '' },
+        Youtube: { type: String, default: '' }
+    },
     links: [
         {   
             name: { type: String, required: true },

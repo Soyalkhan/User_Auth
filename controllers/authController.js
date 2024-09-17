@@ -98,8 +98,10 @@ exports.getMe = async (req, res) => {
             phone: user.phone,
             password: user.password,
             bio: user.bio,
+            profileImageUrl:user.profileImage,
             isVerified: user.isVerified,
             createdAt: user.createdAt,
+            SocialLinks: user.SocialURLs,
             links: user.links
         };
 

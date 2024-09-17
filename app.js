@@ -4,6 +4,8 @@ const cookieParser = require('cookie-parser');
 const connectDB = require('./config/db');
 const cors = require("cors");
 const nameRoutes = require('./routes/nameRoutes'); 
+const profileImageRoutes = require('./routes/profileImageRoutes')
+const GenerateProfileLink = require('./routes/GenrateProfileLinkRoutes')
 // Load environment variablesnpm
 dotenv.config({ path: './.env' });
 
@@ -25,6 +27,7 @@ app.use(cookieParser());
 // Mount routers
 app.use('/api/auth', require('./routes/authRoutes')); //auth
 app.use('/api/links', require('./routes/linkRoutes')); //link
-app.use('/api/name', require('./routes/nameRoutes')); //name
-
+app.use('/api/name', nameRoutes); //name
+app.use('/api/profileImage', profileImageRoutes) // image upload
+app.use('/api/public' , GenerateProfileLink )
 module.exports = app;  // Export the app instance

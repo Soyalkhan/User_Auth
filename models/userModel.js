@@ -22,6 +22,10 @@ const UserSchema = new mongoose.Schema({
             'Please add a valid email'
         ]
     },
+    profileImage: {
+        type: String, // URL of the profile image
+        default: ''  // Default to empty string if no image is uploaded
+    },
     phone: {
         type: String,
         required: [true, 'Please add a phone number'],

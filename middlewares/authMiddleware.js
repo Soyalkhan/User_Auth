@@ -15,7 +15,7 @@ exports.protect = async (req, res, next) => {
         token = req.headers.authorization.split(' ')[1];
     }
 
-    console.log("Header with Token val : " + req.headers.authorization );
+    // console.log("Header with Token val : " + req.headers.authorization );
     
 
     

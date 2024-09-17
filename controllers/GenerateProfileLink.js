@@ -14,7 +14,7 @@ exports.getPublicProfile = async ( req , res ) =>{
             return res.status(400).json({ success: false, message: 'Please provide a username' });
         }
         const user = await User.findOne({ username}).select(' name username links');
-        if(user){
+        if(!user){
             res.status(404),json({ success: false, message: 'user not found'});
         }
     

@@ -15,12 +15,16 @@ exports.AddSocialLink = async (req, res) => {
 
 
         const { SocialLinks } = req.body;
-        if (!SocialLinks) {
-            return res.status(400).json({ success: false, message: 'Please provide social URLs' });
+        if (!SocialLinks || typeof SocialLinks !== 'object') {
+            return res.status(400).json({ success: false, message: 'Please provide social URLs.' });
         }
 
+        // user.SocialURLs = Object.assign(user.SocialURLs, SocialLinks); this was for adding in map form
+        
         // Merge the new social links into the existing SocialURLs
-        user.SocialURLs = Object.assign(user.SocialURLs, SocialLinks);
+        Object.keys(SocialLinks).forEach(key => {
+            user.SocialURLs.set(key, SocialLinks[key]);
+        });
 
         await user.save();
 

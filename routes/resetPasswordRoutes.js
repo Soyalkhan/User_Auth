@@ -1,5 +1,5 @@
 const express  = require('express');
-const {  sendResetPasswordOTP, resetPassword } =  require('../controllers/resetPassword');
+const {  sendResetPasswordOTP, resetPassword } =  require('../controllers/resetPasswordByEmail');
 const { sendResetPasswordByPhone, resetPasswordByPhone } = require('../controllers/resetPasswordByPhone')
 
 const router = express.Router();

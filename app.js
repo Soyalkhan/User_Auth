@@ -7,6 +7,7 @@ const nameRoutes = require('./routes/nameRoutes');
 const profileImageRoutes = require('./routes/profileImageRoutes');
 const GenerateProfileLink = require('./routes/GenrateProfileLinkRoutes');
 const AddSocialURL = require('./routes/AddSocialLinkRoutes');
+const resetPassword = require('./routes/resetPasswordRoutes');
 // Load environment variablesnpm
 dotenv.config({ path: './.env' });
 
@@ -32,4 +33,5 @@ app.use('/api/name', nameRoutes); //name
 app.use('/api/profileImage', profileImageRoutes) // image upload
 app.use('/api/public' , GenerateProfileLink );
 app.use('/api' , AddSocialURL);
+app.use('/api' , resetPassword);
 module.exports = app;  // Export the app instance

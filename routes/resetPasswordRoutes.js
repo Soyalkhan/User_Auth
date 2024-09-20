@@ -8,7 +8,7 @@ router.post('/sendResetPasswordOTP' , sendResetPasswordOTP); // by email
 router.put('/resetPassword' , resetPassword); // by email
 
 router.post('/sendResetOTPByPhone', sendResetPasswordByPhone); // by phone
-router.put('/resetPasswordByPhone' , resetPasswordByPhone) //phone
+router.put('/resetPasswordByPhone' , resetPasswordByPhone) // by phone
 
 
 module.exports = router;

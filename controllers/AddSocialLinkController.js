@@ -15,16 +15,34 @@ exports.AddSocialLink = async (req, res) => {
 
 
         const { SocialLinks } = req.body;
-        if (!SocialLinks || typeof SocialLinks !== 'object') {
-            return res.status(400).json({ success: false, message: 'Please provide social URLs.' });
+        // if (!SocialLinks || typeof SocialLinks !== 'object') {
+        //     return res.status(400).json({ success: false, message: 'Please provide social URLs.' });
+        // }
+
+        // // user.SocialURLs = Object.assign(user.SocialURLs, SocialLinks); this was for adding in map form
+        
+        // // Merge the new social links into the existing SocialURLs
+        // Object.keys(SocialLinks).forEach(key => {
+        //     user.SocialURLs.set(key, SocialLinks[key]);
+        // });
+
+
+        if (!SocialLinks || !Array.isArray(SocialLinks)) {
+            return res.status(400).json({ success: false, message: 'Please provide social links as an array.' });
         }
 
-        // user.SocialURLs = Object.assign(user.SocialURLs, SocialLinks); this was for adding in map form
-        
-        // Merge the new social links into the existing SocialURLs
-        Object.keys(SocialLinks).forEach(key => {
-            user.SocialURLs.set(key, SocialLinks[key]);
-        });
+      // Loop through each social link in the request body and update the corresponding entry
+      SocialLinks.forEach(newLink => {
+        // Find the matching social link in user's SocialURLs by name
+        const existingLink = user.SocialURLs.find(link => link.name === newLink.name);
+
+        if (existingLink) {
+            // Explicitly update the URL even if it's an empty string
+            existingLink.url = newLink.url !== undefined ? newLink.url : existingLink.url;
+        }
+    });
+
+
 
         await user.save();
 

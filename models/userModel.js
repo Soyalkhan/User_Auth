@@ -32,10 +32,10 @@ const UserSchema = new mongoose.Schema({
         sparse: true,
         default: '' ,
         // unique: true,
-        match: [
-            /^\d{10}$/,
-            'Please add a valid 10-digit phone number'
-        ]
+        // match: [
+        //     /^\d{10}$/,
+        //     'Please add a valid 10-digit phone number'
+        // ]
     },
     bio: {
         type: String,

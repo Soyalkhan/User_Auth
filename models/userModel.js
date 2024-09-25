@@ -28,7 +28,9 @@ const UserSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        required: [true, 'Please add a phone number'],
+        required: [false, 'Please add a phone number'],
+        sparse: true,
+        default: '' ,
         unique: true,
         match: [
             /^\d{10}$/,
@@ -43,8 +45,9 @@ const UserSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, 'Please add a password'],
-        minlength: 6,
+        required: [false, 'Please add a password'],
+        default: '' ,
+        sparse: true,
         select: false
     },
     createdAt: {

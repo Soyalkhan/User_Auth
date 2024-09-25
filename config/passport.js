@@ -1,8 +1,7 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../models/userModel'); 
-console.log("GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID);
-console.log("GOOGLE_CLIENT_SECRET:", process.env.GOOGLE_CLIENT_SECRET);
+const jwt = require("jsonwebtoken");
 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -18,6 +17,9 @@ passport.use(new GoogleStrategy({
     console.log("Google Profile: ", profile); // Log the profile object
     console.log("Access Token:", accessToken);
     console.log("Refresh Token:", refreshToken);
+
+    const decodedToken = jwt.decode(accessToken);
+    console.log("Decoded Access Token:", decodedToken);
     try {
       // Check if user already exists in the database
       let user = await User.findOne({ email: profile.emails[0].value });

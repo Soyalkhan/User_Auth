@@ -6,9 +6,8 @@ const jwt = require("jsonwebtoken");
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "https://user-auth-new-with-link.vercel.app/api/auth/google/callback"
-
-    
+    // callbackURL: "https://user-auth-new-with-link.vercel.app/api/auth/google/callback"
+    callbackURL: "http://localhost:5000/api/auth/google/callback"    
   },
   
 
@@ -16,10 +15,6 @@ passport.use(new GoogleStrategy({
   async (accessToken, refreshToken, profile, done) => {
     console.log("Google Profile: ", profile); // Log the profile object
     console.log("Access Token:", accessToken);
-    console.log("Refresh Token:", refreshToken);
-
-    const decodedToken = jwt.decode(accessToken);
-    console.log("Decoded Access Token:", decodedToken);
     try {
       // Check if user already exists in the database
       let user = await User.findOne({ email: profile.emails[0].value });
@@ -29,7 +24,8 @@ passport.use(new GoogleStrategy({
         user = new User({
           name: profile.displayName,
           email: profile.emails[0].value,
-          profileImage: profile.photos[0].value
+          profileImage: profile.photos[0].value,
+          phone: null
         });
         await user.save();
       }

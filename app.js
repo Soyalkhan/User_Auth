@@ -1,13 +1,13 @@
 const express = require('express');
 const dotenv = require('dotenv');
-dotenv.config({ path: './.env' }); // Load environment variables
+dotenv.config({ path: './.env' }); 
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const passport = require('passport');
 const session = require('express-session');
 
 const connectDB = require('./config/db');
-require('./config/passport'); // Ensure this line is added
+require('./config/passport'); 
 
 const googleAuthRoutes = require('./routes/googleAuthRoutes'); // Import Google Auth routes
 

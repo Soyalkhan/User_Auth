@@ -6,8 +6,8 @@ const jwt = require("jsonwebtoken");
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    // callbackURL: "https://user-auth-new-with-link.vercel.app/api/auth/google/callback"
-    callbackURL: "http://localhost:5000/api/auth/google/callback"    
+    callbackURL: "https://user-auth-new-with-link.vercel.app/api/auth/google/callback"
+    // callbackURL: "http://localhost:5000/api/auth/google/callback"    
   },
   
 
